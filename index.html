@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket メッセージ管理</title>
+</head>
+<body>
+    <h1>WebSocket メッセージ管理</h1>
+    <div>
+        <h2>メッセージ一覧</h2>
+        <ul id="messageList"></ul>
+    </div>
+    <div>
+        <h2>メッセージ作成</h2>
+        <input type="text" id="newMessageContent" placeholder="メッセージ内容">
+        <button onclick="createMessage()">作成</button>
+    </div>
+    <div>
+        <h2>メッセージ更新</h2>
+        <input type="text" id="updateMessageId" placeholder="メッセージID">
+        <input type="text" id="updateMessageContent" placeholder="新しいメッセージ内容">
+        <button onclick="updateMessage()">更新</button>
+    </div>
+    <div>
+        <h2>メッセージ削除</h2>
+        <input type="text" id="deleteMessageId" placeholder="メッセージID">
+        <button onclick="deleteMessage()">削除</button>
+    </div>
+
+    <script>
+        const ws = new WebSocket('wss://message-5f58d4568d1f.herokuapp.com/');
+
+        ws.onopen = () => {
+            console.log('WebSocket 接続が確立されました');
+        };
+
+        ws.onmessage = (event) => {
+            const messages = JSON.parse(event.data);
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = '';
+            messages.forEach(message => {
+                const li = document.createElement('li');
+                li.textContent = `ID: ${message.id}, 内容: ${message.contents}`;
+                messageList.appendChild(li);
+            });
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket 接続が閉じられました');
+        };
+
+        function createMessage() {
+            const contents = document.getElementById('newMessageContent').value;
+            ws.send(JSON.stringify({ action: 'create', id : null , contents : contents }));
+        }
+
+        function updateMessage() {
+            const id = document.getElementById('updateMessageId').value;
+            const contents = document.getElementById('updateMessageContent').value;
+            ws.send(JSON.stringify({ action: 'update', id : id, contents : contents }));
+        }
+
+        function deleteMessage() {
+            const id = document.getElementById('deleteMessageId').value;
+            ws.send(JSON.stringify({ action: 'delete', id :id }));
+        }
+    </script>
+</body>
+</html>
