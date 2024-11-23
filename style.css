@@ -18,7 +18,7 @@ h2 {
     color: #555;
 }
 
-div {
+.container {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -29,7 +29,8 @@ div {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
     width: calc(100% - 22px);
     padding: 10px;
     margin: 10px 0;
@@ -61,4 +62,27 @@ li {
     border-radius: 5px;
     padding: 10px;
     margin: 5px 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-top: 10px;
+}
+
+form input,
+form button {
+    margin-top: 5px;
+}
+
+.toggle-buttons {
+    margin: 20px;
+    padding: 10px;
+}
+
+.toggle-buttons button {
+    margin: 0 10px;
 }
